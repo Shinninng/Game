@@ -3,68 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <div class="container">
+        <div class="sidebar">
+            <h2>Menú</h2>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="calendar.html">Calendario</a></li>
+                <li><a href="map.html">Mapa</a></li>
+                <li><a href="magic.html">Rotación de Elementos y Magia</a></li>
+                <li><a href="clan1.html">Clan 1</a></li>
+                <li><a href="clan2.html">Clan 2</a></li>
+                <li><a href="clan3.html">Clan 3</a></li>
+                <li><a href="clan4.html">Clan 4</a></li>
+                <li><a href="clan5.html">Clan 5</a></li>
+                <li><a href="clan6.html">Clan 6</a></li>
+            </ul>
+        </div>
   <title>Calendario Interactivo - Año 102</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-gap: 10px;
-      margin-top: 20px;
-    }
-    .header {
-      padding: 15px;
-      text-align: center;
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      position: relative;
-      min-height: 90px;
-    }
-    .header {
-      background-color: #d9d9d9;
-      font-weight: bold;
-    }
-    .day {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start; /* Para alinear el número del día arriba a la izquierda */
-      padding: 10px;
-      text-align: left; /* Alinear el texto a la izquierda */
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      position: relative;
-      min-height: 90px;
-    }
-
-    .lunar-cycle {
-      font-size: 12px;
-      font-weight: bold;
-      color: #0077b6;
-      align-self: flex-end; /* Para alinear la fase lunar abajo a la derecha */
-      margin-top: auto; /* Deja que el texto anterior ocupe el espacio superior */
-      text-align: right; /* Asegura que el texto esté alineado a la derecha */
-      width: 100%;
-    }
-
-    .festivity {
-      font-size: 12px;
-      font-weight: bold;
-      color: #000;
-    }
-    #info {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <h2>Calendario del Año <span id="year-display">102</span></h2>
+  <h2 style="margin-top: 20px;">Calendario del Año <span id="year-display">102</span></h2>
   
-  <label for="year-select">Selecciona el Año:</label>
+  <label for="year-select" style="display: inline-block;">Selecciona el Año:</label>
   <select id="year-select">
     <option value="102">102</option>
     <option value="103">103</option>
@@ -78,7 +40,7 @@
     <option value="111">111</option>
   </select>
 
-  <label for="month-select">Selecciona el Mes:</label>
+  <label for="month-select" style="display: inline-block;">Selecciona el Mes:</label>
   <select id="month-select">
     <option value="0">Un</option>
     <option value="1">Du</option>

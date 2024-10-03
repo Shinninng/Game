@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: flex-start; /* Asegurarse de que los elementos no se desplacen */
+    gap: 20px; /* Añadir espacio entre el menú y el contenido */
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar h2 {
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    background-color: #444;
+    padding: 5px;
+}
+
+.content {
+    margin-left: 220px; /* Asegurar que el contenido se mantenga separado del menú */
+    padding: 20px;
+}
+
+
+h1 {
+    color: #333;
+}
+
+/* Asegurarse de que el título se vea claramente */
+h2 {
+    color: #333;
+    margin-top: 20px;
+    font-size: 24px;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Estilos para el calendario */
+
+/* Estilos para reducir el tamaño de los dropdowns (selectores) */
+select {
+    width: 150px; /* Tamaño más pequeño */
+    padding: 5px; /* Reducir el padding */
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    margin: 10px 0;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.header {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ffdbdb;
+    background-color: #f9f9f9;
+    position: relative;
+    min-height: 100px; /* Aumentar para asegurar que el contenido no se corte */
+    overflow: hidden;  /* Para evitar que el texto salga del recuadro */
+}
+
+.day {
+    min-height: 90px;
+    max-height: 100px; /* Límite de altura */
+    overflow: hidden;  /* Prevenir desbordes de contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.day {
+    background-color: #d9d9d9; /* Color de fondo más oscuro */
+    border: 1px solid #aaa; /* Ligeramente más oscuro */
+    color: #333; /* Color de texto más oscuro para mejor legibilidad */
+}
+
+.lunar-cycle, .festivity {
+    font-size: 12px;
+     color: #004466;
+    align-self: flex-end;
+    text-align: right;
+    width: 100%;
+}
+
+.lunar-cycle {
+    margin-top: auto;
+}
+
+.festivity {
+    color: #000;
+}
+
+#year-display {
+    font-weight: bold;
+    font-size: 24px;
+    color: #444;
+}
+
+#info {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .calendar {
+        grid-template-columns: repeat(2, 1fr); /* Cambia a dos columnas en pantallas pequeñas */
+    }
+
+    .content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar {
+        grid-template-columns: repeat(1, 1fr); /* Una columna en pantallas aún más pequeñas */
+    }
+}

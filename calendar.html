@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Interactivo - Año 102</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-gap: 10px;
+      margin-top: 20px;
+    }
+    .header {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      position: relative;
+      min-height: 90px;
+    }
+    .header {
+      background-color: #d9d9d9;
+      font-weight: bold;
+    }
+    .day {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start; /* Para alinear el número del día arriba a la izquierda */
+      padding: 10px;
+      text-align: left; /* Alinear el texto a la izquierda */
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      position: relative;
+      min-height: 90px;
+    }
+
+    .lunar-cycle {
+      font-size: 12px;
+      font-weight: bold;
+      color: #0077b6;
+      align-self: flex-end; /* Para alinear la fase lunar abajo a la derecha */
+      margin-top: auto; /* Deja que el texto anterior ocupe el espacio superior */
+      text-align: right; /* Asegura que el texto esté alineado a la derecha */
+      width: 100%;
+    }
+
+    .festivity {
+      font-size: 12px;
+      font-weight: bold;
+      color: #000;
+    }
+    #info {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calendario del Año <span id="year-display">102</span></h2>
+  
+  <label for="year-select">Selecciona el Año:</label>
+  <select id="year-select">
+    <option value="102">102</option>
+    <option value="103">103</option>
+    <option value="104">104</option>
+    <option value="105">105</option>
+    <option value="106">106</option>
+    <option value="107">107</option>
+    <option value="108">108</option>
+    <option value="109">109</option>
+    <option value="110">110</option>
+    <option value="111">111</option>
+  </select>
+
+  <label for="month-select">Selecciona el Mes:</label>
+  <select id="month-select">
+    <option value="0">Un</option>
+    <option value="1">Du</option>
+    <option value="2">Trin</option>
+    <option value="3">Kuar</option>
+    <option value="4">Fim</option>
+    <option value="5">Sez</option>
+    <option value="6">Sen</option>
+    <option value="7">Oxt</option>
+    <option value="8">Nin</option>
+    <option value="9">Daz</option>
+    <option value="10">Ondu</option>
+    <option value="11">Dotrin</option>
+    <option value="12">Kater</option>
+    <option value="13">Fimun</option>
+    <option value="14">Sezfim</option>
+    <option value="15">Sezdar</option>
+  </select>
+
+  <div class="calendar" id="calendar">
+    <div class="header">Luf</div>
+    <div class="header">Tyimvulf</div>
+    <div class="header">Klafu</div>
+    <div class="header">Gasmulf</div>
+    <div class="header">Dim</div>
+    <div class="header">Glof</div>
+    <div class="header">Syrim</div>
+  </div>
+
+  <div id="info"></div>
+
+  <script>
+    const calendarElement = document.getElementById('calendar');
+    const monthSelect = document.getElementById('month-select');
+    const yearSelect = document.getElementById('year-select');
+    const yearDisplay = document.getElementById('year-display');
+
+    const months = [
+      "Un", "Du", "Trin", "Kuar", "Fim", "Sez", "Sen", "Oxt", 
+      "Nin", "Daz", "Ondu", "Dotrin", "Kater", "Fimun", "Sezfim", "Sezdar"
+    ];
+    const daysInMonth = 32;
+    const weekdays = ["Luf", "Tyimvulf", "Klafu", "Gasmulf", "Dim", "Glof", "Syrim"];
+
+    const lunarCycles = [
+      { name: "olf Timvulf", cycle: 15, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 0, months: [4, 5, 6, 7] }, 
+      { name: "olf Klafu", cycle: 30, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 15, months: [8, 9, 10, 11] }, 
+      { name: "olf Gasmulf", cycle: 45, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 30, months: [12, 13, 14, 15] }, 
+      { name: "olf Dim", cycle: 60, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 45, months: [0, 1, 2, 3] }
+    ];
+
+    let selectedYear = 102;
+
+    // Función para calcular la fase de la luna dependiendo del día
+    function getLunarPhase(day, cycleLength, phases) {
+      const phaseIndex = Math.floor((day % cycleLength) / (cycleLength / phases.length));
+      return phases[phaseIndex];
+    }
+
+    // Función para crear los días del mes
+    function createCalendar(month) {
+      // Limpiar el calendario actual
+      calendarElement.innerHTML = `
+        <div class="header">Luf</div>
+        <div class="header">Tyimvulf</div>
+        <div class="header">Klafu</div>
+        <div class="header">Gasmulf</div>
+        <div class="header">Dim</div>
+        <div class="header">Glof</div>
+        <div class="header">Syrim</div>
+      `;
+
+      const firstDayIndex = (month * daysInMonth) % 7;
+
+      // Buscar la luna correspondiente al mes
+      const currentLunarCycle = lunarCycles.find(l => l.months.includes(parseInt(month)));
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        calendarElement.innerHTML += `<div class="day"></div>`;
+      }
+
+      // Crear cada día del mes
+      for (let day = 1; day <= daysInMonth; day++) {
+        const lunarPhase = getLunarPhase(day, currentLunarCycle.cycle, currentLunarCycle.phases);
+        calendarElement.innerHTML += `
+          <div class="day">
+            ${day}
+            <div class="lunar-cycle">${currentLunarCycle.name} - ${lunarPhase}</div>
+            <div class="festivity"></div>
+          </div>
+        `;
+      }
+    }
+
+    // Función para agregar festividades
+    function agregarFestividad(dia, textoFestividad) {
+      const dias = document.querySelectorAll('.day');
+      if (dia > 0 && dia <= dias.length) {
+        dias[dia - 1].querySelector('.festivity').textContent = textoFestividad;
+      }
+    }
+
+    yearSelect.addEventListener('change', function() {
+      selectedYear = parseInt(this.value);
+      yearDisplay.textContent = selectedYear;
+      createCalendar(monthSelect.value);
+    });
+
+    monthSelect.addEventListener('change', function() {
+      createCalendar(this.value);
+    });
+
+    // Inicializar el calendario en el primer mes
+   createCalendar(monthSelect.value);
+
+    // Agregar festividades
+    agregarFestividad(5, "Festival de las Lunas");
+    agregarFestividad(15, "Día de la Victoria");
+    agregarFestividad(25, "Día del Solsticio");
+  </script>
+
+</body>
+</html>

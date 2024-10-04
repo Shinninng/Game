@@ -1,163 +1,318 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML> 
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <div class="container">
-        <div class="sidebar">
-            <h2>Menú</h2>
-            <ul>
-                
-                <li><a href="history.html">Historia</a></li>
-                <li><a href="magic.html">Magia</a></li>
-                <li><a href="clan.html">Clanes</a></li>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="map.html">Mapa y Zonas</a></li>
-                <li><a href="characters.html">Personajes</a></li>
-            </ul>
-        </div>
-  <title>Calendario Interactivo - Año 102</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+	<head>
+		<title>HateForSmallDogs - Calendario</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/calendar.css"/>
+	</head>
+	<body class="is-preload">
 
-  <h1 style="margin-top: 20px;">Calendario del Año <span id="year-display">102</span></h1>
-  
-  <label for="year-select" style="display: inline-block;">Selecciona el Año:</label>
-  <select id="year-select">
-    <option value="102">102</option>
-    <option value="103">103</option>
-    <option value="104">104</option>
-    <option value="105">105</option>
-    <option value="106">106</option>
-    <option value="107">107</option>
-    <option value="108">108</option>
-    <option value="109">109</option>
-    <option value="110">110</option>
-    <option value="111">111</option>
-  </select>
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-  <label for="month-select" style="display: inline-block;">Selecciona el Mes:</label>
-  <select id="month-select">
-    <option value="0">Un</option>
-    <option value="1">Du</option>
-    <option value="2">Trin</option>
-    <option value="3">Kuar</option>
-    <option value="4">Fim</option>
-    <option value="5">Sez</option>
-    <option value="6">Sen</option>
-    <option value="7">Oxt</option>
-    <option value="8">Nin</option>
-    <option value="9">Daz</option>
-    <option value="10">Ondu</option>
-    <option value="11">Dotrin</option>
-    <option value="12">Kater</option>
-    <option value="13">Fimun</option>
-    <option value="14">Sezfim</option>
-    <option value="15">Sezdar</option>
-  </select>
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
 
-  <div class="calendar" id="calendar">
-    <div class="header">Luf</div>
-    <div class="header">Tyimvulf</div>
-    <div class="header">Klafu</div>
-    <div class="header">Gasmulf</div>
-    <div class="header">Dim</div>
-    <div class="header">Glof</div>
-    <div class="header">Syrim</div>
-  </div>
+							<!-- Encabezado -->
+								<header id="header">
+									<a class="logo"><strong>Calendario</strong></a>
+								</header>
 
-  <div id="info"></div>
+							<!-- Contenido -->
+								<section>
+                                	
+									<main class="calendar-contain">
+										<section class="title-bar">
+										</section>
 
-  <script>
-    const calendarElement = document.getElementById('calendar');
-    const monthSelect = document.getElementById('month-select');
-    const yearSelect = document.getElementById('year-select');
-    const yearDisplay = document.getElementById('year-display');
+										<aside class="calendar__sidebar">
+											<h2 class="sidebar__heading">Luf<br>Un 1</h2>
+											<ul class="sidebar__list">
+											<li class="sidebar__list-item"><span class="list-item__time">olf Timvulf</span>4, 5, 6, 7</li>						
+											<li class="sidebar__list-item"><span class="list-item__time">olf Klafu</span>8, 9, 10, 11</li>
+											<li class="sidebar__list-item"><span class="list-item__time">olf Gasmulf</span>12, 13, 14, 15</li>
+											<li class="sidebar__list-item"><span class="list-item__time">olf Dim</span>0, 1, 2, 3</li>
+											</ul>
+										</aside>
 
-    const months = [
-      "Un", "Du", "Trin", "Kuar", "Fim", "Sez", "Sen", "Oxt", 
-      "Nin", "Daz", "Ondu", "Dotrin", "Kater", "Fimun", "Sezfim", "Sezdar"
-    ];
-    const daysInMonth = 32;
-    const weekdays = ["Luf", "Tyimvulf", "Klafu", "Gasmulf", "Dim", "Glof", "Syrim"];
+										
+										<section class="calendar__days">
+											<section class="calendar__top-bar">
+											<span class="top-bar__days">Luf</span>
+											<span class="top-bar__days">Tymvulf</span>
+											<span class="top-bar__days">Klafu</span>
+											<span class="top-bar__days">Gasvulf</span>
+											<span class="top-bar__days">Dim</span>
+											<span class="top-bar__days">Glof</span>
+											<span class="top-bar__days">Syrim</span>
+											</section>
 
-    const lunarCycles = [
-      { name: "olf Timvulf", cycle: 15, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 0, months: [4, 5, 6, 7] }, 
-      { name: "olf Klafu", cycle: 30, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 15, months: [8, 9, 10, 11] }, 
-      { name: "olf Gasmulf", cycle: 45, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 30, months: [12, 13, 14, 15] }, 
-      { name: "olf Dim", cycle: 60, phases: ["WC", "FQ", "FM", "LQ", "WG"], change: 45, months: [0, 1, 2, 3] }
-    ];
+											<section class="calendar__week">
+												<div class="calendar__day today">
+													<span class="calendar__date">1</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">2</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">3</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">4</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">5</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">6</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">7</span>
+													<span class="calendar__task">0</span>
+												</div>
+											</section>
 
-    let selectedYear = 102;
+											<section class="calendar__week">
+												<div class="calendar__day">
+													<span class="calendar__date">8</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">9</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">10</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">11</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">12</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">13</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">14</span>
+													<span class="calendar__task">0</span>
+												</div>
+											</section>
 
-    // Función para calcular la fase de la luna dependiendo del día
-    function getLunarPhase(day, cycleLength, phases) {
-      const phaseIndex = Math.floor((day % cycleLength) / (cycleLength / phases.length));
-      return phases[phaseIndex];
-    }
+											<section class="calendar__week">
+												<div class="calendar__day">
+													<span class="calendar__date">15</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">16</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">17</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">18</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">19</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">20</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">21</span>
+													<span class="calendar__task">0</span>
+												</div>
+											</section>
 
-    // Función para crear los días del mes
-    function createCalendar(month) {
-      // Limpiar el calendario actual
-      calendarElement.innerHTML = `
-        <div class="header">Luf</div>
-        <div class="header">Tyimvulf</div>
-        <div class="header">Klafu</div>
-        <div class="header">Gasmulf</div>
-        <div class="header">Dim</div>
-        <div class="header">Glof</div>
-        <div class="header">Syrim</div>
-      `;
+											<section class="calendar__week">
+												<div class="calendar__day">
+													<span class="calendar__date">22</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">23</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">24</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">25</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">26</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">27</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">28</span>
+													<span class="calendar__task">0</span>
+												</div>
+											</section>
 
-      const firstDayIndex = (month * daysInMonth) % 7;
+											<section class="calendar__week">
+												<div class="calendar__day">
+													<span class="calendar__date">29</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">30</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">31</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day">
+													<span class="calendar__date">32</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day inactive">
+													<span class="calendar__date">1</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day inactive">
+													<span class="calendar__date">2</span>
+													<span class="calendar__task">0</span>
+												</div>
+												<div class="calendar__day inactive">
+													<span class="calendar__date">3</span>
+													<span class="calendar__task">0</span>
+												</div>
+											</section>
+										</section>
 
-      // Buscar la luna correspondiente al mes
-      const currentLunarCycle = lunarCycles.find(l => l.months.includes(parseInt(month)));
+									</main>
 
-      for (let i = 0; i < firstDayIndex; i++) {
-        calendarElement.innerHTML += `<div class="day"></div>`;
-      }
+								</section>
+						</div>
+					</div>
 
-      // Crear cada día del mes
-      for (let day = 1; day <= daysInMonth; day++) {
-        const lunarPhase = getLunarPhase(day, currentLunarCycle.cycle, currentLunarCycle.phases);
-        calendarElement.innerHTML += `
-          <div class="day">
-            ${day}
-            <div class="lunar-cycle">${currentLunarCycle.name} - ${lunarPhase}</div>
-            <div class="festivity"></div>
-          </div>
-        `;
-      }
-    }
+				<!-- Barra -->
+					<div id="sidebar">
+						<div class="inner">
 
-    // Función para agregar festividades
-    function agregarFestividad(dia, textoFestividad) {
-      const dias = document.querySelectorAll('.day');
-      if (dia > 0 && dia <= dias.length) {
-        dias[dia - 1].querySelector('.festivity').textContent = textoFestividad;
-      }
-    }
+							<!-- Buscar-->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Buscar" />
+									</form>
+								</section>
 
-    yearSelect.addEventListener('change', function() {
-      selectedYear = parseInt(this.value);
-      yearDisplay.textContent = selectedYear;
-      createCalendar(monthSelect.value);
-    });
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menú</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Inicio</a></li>
+                                        <li><a href="history.html">Historia</a></li>
+										<li><span class="opener"></span>
+                                        <ul>
+                                            <li><span class="opener"></span>
+                                                <ul>
+                                                    <li><a href="#"></a></li>
+                                                    <li><a href="#">Más </a></li>
+                                                    <li><a href="#">Aún más </a></li>
+                                                    <li><a href="#">Todavía más </a></li>
+                                                </ul>
+                                            </li>
+                                            <li><span class="opener"></span>
+                                                <ul>
+                                                    <li><a href="#"></a></li>
+                                                    <li><a href="#">Más </a></li>
+                                                    <li><a href="#">Aún más </a></li>
+                                                    <li><a href="#">Inclusive más </a></li>
+                                                </ul>
+                                            </li>   
+                                        </ul>  
+                                        <li><a href="magic.html">Magia</a></li>
+										<li><a href="clan.html">Clanes</a></li>
+										<li><a href="calendar.html">Calendario</a></li>
+										<li><a href="map.html">Mapa y Zonas</a></li>
+										<li><a href="characters.html">Personajes</a></li>
+										<li><a href="updates.html">Actualizaciones</a></li>
+										<li><a href="events.html">Eventos</a></li>
+										<li><a href="contact.html">Feedback</a></li>
+										<li><a href="community.html">Comunidad</a></li>
+									</ul>
+								</nav>
 
-    monthSelect.addEventListener('change', function() {
-      createCalendar(this.value);
-    });
+							<!-- Seccion -->
+								<section>
+									<header class="major">
+										<h2>Novedades</h2>
+									</header>
+									<div class="mini-posts">
+										<article>
+											<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+											<p>¡Nuevos Eventos!</p>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic08.jpg" alt="" /></a>
+											<p>¡Nuevas Ciudades!</p>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic09.jpg" alt="" /></a>
+											<p>¡Bienvenidos a HateForSmallDogs!</p>
+										</article>
+									</div>
+									<ul class="actions">
+										<li><a href="updates.html" class="button">Ver Más</a></li>
+									</ul>
+								</section>
 
-    // Inicializar el calendario en el primer mes
-   createCalendar(monthSelect.value);
+							<!-- Seccion -->
+								<section>
+									<header class="major">
+										<h2>Contacto</h2>
+									</header>
+									<p>Puedes contactarme directamente por correo.</p>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">r3kcutpleh@gmail.com</a></li>
+									</ul>
+								</section>
 
-    // Agregar festividades
-    agregarFestividad(5, "Festival de las Lunas");
-    agregarFestividad(15, "Día de la Victoria");
-    agregarFestividad(25, "Día del Solsticio");
-  </script>
+							<!-- Pie -->
+								<footer id="footer">
+									<p class="copyright">&copy; r3kcutpleh & unsplash <a href="https://unsplash.com"></p>
+								</footer>
 
-</body>
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
 </html>

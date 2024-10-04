@@ -1246,8 +1246,9 @@ input[type="radio"] + label:before {
 /* Icon */
 .img-ajustada {
     width: 80px; /* Ajusta el ancho según sea necesario */
-    height: auto; /* Mantener la proporción de la imagen */
+    height: 80px; /* Mantener la proporción de la imagen */
     margin-bottom: 15px; /* Espacio entre la imagen y el contenido */
+    margin-right: 20px;
 }
 .icon {
   text-decoration: none;
@@ -2334,3 +2335,4 @@ button,
     border-top: 0;
     margin-top: 0;
     padding-top: 0; }
+

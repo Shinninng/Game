@@ -1,353 +1,198 @@
-!function() {
+// Arrays con los meses y días
+const meses = ["Un", "Du", "Trin", "Kuar", "Fim", "Sez", "Sen", "Oxt", "Nin", "Daz", "Ondu", "Dotrin", "Kater", "Fimun", "Sezfim", "Sezdar"];
+const diasSemana = ["Luf", "Tyimvulf", "Klafu", "Gasmulf", "Dim", "Glof", "Syrim"];
+let currentYear = 102;
+let currentMonth = 0; // Índice del mes
+let currentDayOfWeek = 0; // Índice del día de la semana (Luf)
 
-  var today = moment();
+// Ciclos de las lunas
+const lunares = {
+  timvulf: 21,  // olf Timvulf
+  klafu: 29,    // olf Klafu
+  gasmulf: 13,  // olf Gasmulf
+  dim: 25       // olf Dim
+};
 
-  function Calendar(selector, events) {
-    this.el = document.querySelector(selector);
-    this.events = events;
-    this.current = moment().date(1);
-    this.draw();
-    var current = document.querySelector('.today');
-    if(current) {
-      var self = this;
-      window.setTimeout(function() {
-        self.openDay(current);
-      }, 500);
-    }
+// Festividades y Tasks
+const festividades = {
+  50: "Festival de la Luna",
+  200: "Día del Sol",
+  512: "Fin de Año",
+  1: "Tarea importante",  
+  3: "Otra tarea"          
+};
+
+// Función para cambiar el mes
+function cambiarMes(mesIndex) {
+  if (mesIndex >= meses.length) {
+    currentMonth = 0;  // Reiniciar al primer mes si se supera el último mes
+    currentYear++;      // Aumentar el año cuando se pasa de diciembre
+  } else if (mesIndex < 0) {
+    currentMonth = meses.length - 1;  // Ir al último mes si retrocede de enero
+    currentYear--;      // Reducir el año cuando se retrocede a diciembre
+  } else {
+    currentMonth = mesIndex;
   }
 
-  Calendar.prototype.draw = function() {
-    //Create Header
-    this.drawHeader();
-
-    //Draw Month
-    this.drawMonth();
-
-    this.drawLegend();
+  // Calcular el nuevo día de la semana al cambiar el mes
+  let diasPrevios = 0;
+  for (let i = 0; i < currentMonth; i++) {
+    diasPrevios += diasPorMes[i];
   }
-
-  Calendar.prototype.drawHeader = function() {
-    var self = this;
-    if(!this.header) {
-      //Create the header elements
-      this.header = createElement('div', 'header');
-      this.header.className = 'header';
-
-      this.title = createElement('h1');
-
-      var right = createElement('div', 'right');
-      right.addEventListener('click', function() { self.nextMonth(); });
-
-      var left = createElement('div', 'left');
-      left.addEventListener('click', function() { self.prevMonth(); });
-
-      //Append the Elements
-      this.header.appendChild(this.title); 
-      this.header.appendChild(right);
-      this.header.appendChild(left);
-      this.el.appendChild(this.header);
-    }
-
-    this.title.innerHTML = this.current.format('MMMM YYYY');
-  }
-
-  Calendar.prototype.drawMonth = function() {
-    var self = this;
-    
-    this.events.forEach(function(ev) {
-     ev.date = self.current.clone().date(Math.random() * (29 - 1) + 1);
-    });
-    
-    
-    if(this.month) {
-      this.oldMonth = this.month;
-      this.oldMonth.className = 'month out ' + (self.next ? 'next' : 'prev');
-      this.oldMonth.addEventListener('webkitAnimationEnd', function() {
-        self.oldMonth.parentNode.removeChild(self.oldMonth);
-        self.month = createElement('div', 'month');
-        self.backFill();
-        self.currentMonth();
-        self.fowardFill();
-        self.el.appendChild(self.month);
-        window.setTimeout(function() {
-          self.month.className = 'month in ' + (self.next ? 'next' : 'prev');
-        }, 16);
-      });
-    } else {
-        this.month = createElement('div', 'month');
-        this.el.appendChild(this.month);
-        this.backFill();
-        this.currentMonth();
-        this.fowardFill();
-        this.month.className = 'month new';
-    }
-  }
-
-  Calendar.prototype.backFill = function() {
-    var clone = this.current.clone();
-    var dayOfWeek = clone.day();
-
-    if(!dayOfWeek) { return; }
-
-    clone.subtract('days', dayOfWeek+1);
-
-    for(var i = dayOfWeek; i > 0 ; i--) {
-      this.drawDay(clone.add('days', 1));
-    }
-  }
-
-  Calendar.prototype.fowardFill = function() {
-    var clone = this.current.clone().add('months', 1).subtract('days', 1);
-    var dayOfWeek = clone.day();
-
-    if(dayOfWeek === 6) { return; }
-
-    for(var i = dayOfWeek; i < 6 ; i++) {
-      this.drawDay(clone.add('days', 1));
-    }
-  }
-
-  Calendar.prototype.currentMonth = function() {
-    var clone = this.current.clone();
-
-    while(clone.month() === this.current.month()) {
-      this.drawDay(clone);
-      clone.add('days', 1);
-    }
-  }
-
-  Calendar.prototype.getWeek = function(day) {
-    if(!this.week || day.day() === 0) {
-      this.week = createElement('div', 'week');
-      this.month.appendChild(this.week);
-    }
-  }
-
-  Calendar.prototype.drawDay = function(day) {
-    var self = this;
-    this.getWeek(day);
-
-    //Outer Day
-    var outer = createElement('div', this.getDayClass(day));
-    outer.addEventListener('click', function() {
-      self.openDay(this);
-    });
-
-    //Day Name
-    var name = createElement('div', 'day-name', day.format('ddd'));
-
-    //Day Number
-    var number = createElement('div', 'day-number', day.format('DD'));
-
-
-    //Events
-    var events = createElement('div', 'day-events');
-    this.drawEvents(day, events);
-
-    outer.appendChild(name);
-    outer.appendChild(number);
-    outer.appendChild(events);
-    this.week.appendChild(outer);
-  }
-
-  Calendar.prototype.drawEvents = function(day, element) {
-    if(day.month() === this.current.month()) {
-      var todaysEvents = this.events.reduce(function(memo, ev) {
-        if(ev.date.isSame(day, 'day')) {
-          memo.push(ev);
-        }
-        return memo;
-      }, []);
-
-      todaysEvents.forEach(function(ev) {
-        var evSpan = createElement('span', ev.color);
-        element.appendChild(evSpan);
-      });
-    }
-  }
-
-  Calendar.prototype.getDayClass = function(day) {
-    classes = ['day'];
-    if(day.month() !== this.current.month()) {
-      classes.push('other');
-    } else if (today.isSame(day, 'day')) {
-      classes.push('today');
-    }
-    return classes.join(' ');
-  }
-
-  Calendar.prototype.openDay = function(el) {
-    var details, arrow;
-    var dayNumber = +el.querySelectorAll('.day-number')[0].innerText || +el.querySelectorAll('.day-number')[0].textContent;
-    var day = this.current.clone().date(dayNumber);
-
-    var currentOpened = document.querySelector('.details');
-
-    //Check to see if there is an open detais box on the current row
-    if(currentOpened && currentOpened.parentNode === el.parentNode) {
-      details = currentOpened;
-      arrow = document.querySelector('.arrow');
-    } else {
-      //Close the open events on differnt week row
-      //currentOpened && currentOpened.parentNode.removeChild(currentOpened);
-      if(currentOpened) {
-        currentOpened.addEventListener('webkitAnimationEnd', function() {
-          currentOpened.parentNode.removeChild(currentOpened);
-        });
-        currentOpened.addEventListener('oanimationend', function() {
-          currentOpened.parentNode.removeChild(currentOpened);
-        });
-        currentOpened.addEventListener('msAnimationEnd', function() {
-          currentOpened.parentNode.removeChild(currentOpened);
-        });
-        currentOpened.addEventListener('animationend', function() {
-          currentOpened.parentNode.removeChild(currentOpened);
-        });
-        currentOpened.className = 'details out';
-      }
-
-      //Create the Details Container
-      details = createElement('div', 'details in');
-
-      //Create the arrow
-      var arrow = createElement('div', 'arrow');
-
-      //Create the event wrapper
-
-      details.appendChild(arrow);
-      el.parentNode.appendChild(details);
-    }
-
-    var todaysEvents = this.events.reduce(function(memo, ev) {
-      if(ev.date.isSame(day, 'day')) {
-        memo.push(ev);
-      }
-      return memo;
-    }, []);
-
-    this.renderEvents(todaysEvents, details);
-
-    arrow.style.left = el.offsetLeft - el.parentNode.offsetLeft + 27 + 'px';
-  }
-
-  Calendar.prototype.renderEvents = function(events, ele) {
-    //Remove any events in the current details element
-    var currentWrapper = ele.querySelector('.events');
-    var wrapper = createElement('div', 'events in' + (currentWrapper ? ' new' : ''));
-
-    events.forEach(function(ev) {
-      var div = createElement('div', 'event');
-      var square = createElement('div', 'event-category ' + ev.color);
-      var span = createElement('span', '', ev.eventName);
-
-      div.appendChild(square);
-      div.appendChild(span);
-      wrapper.appendChild(div);
-    });
-
-    if(!events.length) {
-      var div = createElement('div', 'event empty');
-      var span = createElement('span', '', 'No Events');
-
-      div.appendChild(span);
-      wrapper.appendChild(div);
-    }
-
-    if(currentWrapper) {
-      currentWrapper.className = 'events out';
-      currentWrapper.addEventListener('webkitAnimationEnd', function() {
-        currentWrapper.parentNode.removeChild(currentWrapper);
-        ele.appendChild(wrapper);
-      });
-      currentWrapper.addEventListener('oanimationend', function() {
-        currentWrapper.parentNode.removeChild(currentWrapper);
-        ele.appendChild(wrapper);
-      });
-      currentWrapper.addEventListener('msAnimationEnd', function() {
-        currentWrapper.parentNode.removeChild(currentWrapper);
-        ele.appendChild(wrapper);
-      });
-      currentWrapper.addEventListener('animationend', function() {
-        currentWrapper.parentNode.removeChild(currentWrapper);
-        ele.appendChild(wrapper);
-      });
-    } else {
-      ele.appendChild(wrapper);
-    }
-  }
-
-  Calendar.prototype.drawLegend = function() {
-    var legend = createElement('div', 'legend');
-    var calendars = this.events.map(function(e) {
-      return e.calendar + '|' + e.color;
-    }).reduce(function(memo, e) {
-      if(memo.indexOf(e) === -1) {
-        memo.push(e);
-      }
-      return memo;
-    }, []).forEach(function(e) {
-      var parts = e.split('|');
-      var entry = createElement('span', 'entry ' +  parts[1], parts[0]);
-      legend.appendChild(entry);
-    });
-    this.el.appendChild(legend);
-  }
-
-  Calendar.prototype.nextMonth = function() {
-    this.current.add('months', 1);
-    this.next = true;
-    this.draw();
-  }
-
-  Calendar.prototype.prevMonth = function() {
-    this.current.subtract('months', 1);
-    this.next = false;
-    this.draw();
-  }
-
-  window.Calendar = Calendar;
-
-function createElement(tagName, className, innerText) {
-  var ele = document.createElement(tagName);
-  if (className) {
-    ele.className = className;
-  }
-  if (innerText) {
-    ele.innerText = innerText;  // Corregido aquí
-  }
-  return ele;
-}
-}();
-
-!function() {
-  var data = [
-    { eventName: 'Lunch Meeting w/ Mark', calendar: 'Work', color: 'orange' },
-    { eventName: 'Interview - Jr. Web Developer', calendar: 'Work', color: 'orange' },
-    { eventName: 'Demo New App to the Board', calendar: 'Work', color: 'orange' },
-    { eventName: 'Dinner w/ Marketing', calendar: 'Work', color: 'orange' },
-
-    { eventName: 'Game vs Portalnd', calendar: 'Sports', color: 'blue' },
-    { eventName: 'Game vs Houston', calendar: 'Sports', color: 'blue' },
-    { eventName: 'Game vs Denver', calendar: 'Sports', color: 'blue' },
-    { eventName: 'Game vs San Degio', calendar: 'Sports', color: 'blue' },
-
-    { eventName: 'School Play', calendar: 'Kids', color: 'yellow' },
-    { eventName: 'Parent/Teacher Conference', calendar: 'Kids', color: 'yellow' },
-    { eventName: 'Pick up from Soccer Practice', calendar: 'Kids', color: 'yellow' },
-    { eventName: 'Ice Cream Night', calendar: 'Kids', color: 'yellow' },
-
-    { eventName: 'Free Tamale Night', calendar: 'Other', color: 'green' },
-    { eventName: 'Bowling Team', calendar: 'Other', color: 'green' },
-    { eventName: 'Teach Kids to Code', calendar: 'Other', color: 'green' },
-    { eventName: 'Startup Weekend', calendar: 'Other', color: 'green' }
-  ];
-
   
+  // Ajustar el día de la semana basado en los días anteriores
+  currentDayOfWeek = diasPrevios % diasSemana.length;
 
-  function addDate(ev) {
-    
+  actualizarMesYAnoEnAside(); // Actualiza el mes y año en el <aside>
+  actualizarDiaDeLaSemanaEnAside(); // Actualizar el día de la semana inicial
+  actualizarDias(); // Actualizar los días del calendario
+}
+
+
+// Función para cambiar el año
+function cambiarAno(ano) {
+  currentYear = ano;
+  actualizarMesYAnoEnAside(); // Actualiza el mes y año en el <aside>
+  actualizarDias(); // Actualizar también los días, por si cambia la fase lunar
+}
+
+// Función para actualizar el nombre del mes y año en el <aside>
+function actualizarMesYAnoEnAside() {
+  const asideElement = document.querySelector('#currentMonthYear');
+  asideElement.textContent = `${meses[currentMonth]} ${currentYear}`;
+
+}
+
+// Función para actualizar el día de la semana en el <aside>
+function actualizarDiaDeLaSemanaEnAside() {
+  const dayElement = document.querySelector('#currentDay');
+  dayElement.textContent = diasSemana[currentDayOfWeek];
+}
+
+// Función para obtener el día del año actual (basado en el mes y el día actual)
+function obtenerDiaDelAno() {
+  const diaActual = parseInt(document.querySelector('.calendar__day.today .calendar__date').textContent);
+  const diasPrevios = currentMonth * 32; // Sumar los días de los meses anteriores
+  return diasPrevios + diaActual;
+}
+
+// Función para obtener la fase de una luna según su ciclo
+function obtenerFaseLuna(dia, cicloLuna) {
+  return dia % cicloLuna;
+}
+
+// Función para actualizar las fases lunares en el calendario con logs
+function actualizarLunas() {
+  const diasEnElAno = obtenerDiaDelAno(); // Obtenemos el día actual en el año
+
+  // Verificación: imprimir día actual en el año
+  console.log(`Día en el año para calcular fases lunares: ${diasEnElAno}`);
+
+  // Calculamos la fase de cada luna basándonos en su ciclo
+  const faseTimvulf = obtenerFaseLuna(diasEnElAno, lunares.timvulf);
+  const faseKlafu = obtenerFaseLuna(diasEnElAno, lunares.klafu);
+  const faseGasmulf = obtenerFaseLuna(diasEnElAno, lunares.gasmulf);
+  const faseDim = obtenerFaseLuna(diasEnElAno, lunares.dim);
+
+  // Verificación: imprimir fases lunares calculadas
+  console.log(`Fase de Timvulf: ${faseTimvulf}, Fase de Klafu: ${faseKlafu}, Fase de Gasmulf: ${faseGasmulf}, Fase de Dim: ${faseDim}`);
+
+  // Actualizamos los elementos de las fases lunares en el sidebar
+  document.querySelector('.sidebar__list-item .olfTimvulf').textContent = `Fase: ${faseTimvulf}`;
+  document.querySelector('.sidebar__list-item .olfKlafu').textContent = `Fase: ${faseKlafu}`;
+  document.querySelector('.sidebar__list-item .olfGasmulf').textContent = `Fase: ${faseGasmulf}`;
+  document.querySelector('.sidebar__list-item .olfDim').textContent = `Fase: ${faseDim}`;
+}
+
+
+
+// Función para mostrar festividades
+function mostrarFestividades(dia) {
+  return festividades[dia] || "";
+}
+
+// Array que representa la cantidad de días por mes
+const diasPorMes = [32, 30, 28, 32, 31, 30, 29, 31, 32, 29, 30, 28, 32, 31, 30, 29]; // Ajusta esto según tu calendario
+
+// Función para actualizar los días del calendario con logs para depuración
+function actualizarDias() {
+  const dias = document.querySelectorAll('.calendar__day');
+  let diasPrevios = 0;
+
+  // Sumar los días de los meses anteriores al actual
+  for (let i = 0; i < currentMonth; i++) {
+    diasPrevios += diasPorMes[i];
   }
 
-  var calendar = new Calendar('#calendar', data);
+  // Verificación: imprimir mes actual y días anteriores al mes
+  console.log(`Mes actual: ${currentMonth}, Días anteriores: ${diasPrevios}`);
 
-}();
+  // Número de días en el mes actual
+  const diasEnElMes = diasPorMes[currentMonth];
+
+  dias.forEach((diaElem, index) => {
+    if (index < diasEnElMes) {
+      const diaActual = index + 1;
+      const diaDelAno = diasPrevios + diaActual;
+
+      // Mostrar el día en el calendario
+      diaElem.querySelector('.calendar__date').textContent = diaActual;
+      diaElem.style.display = ''; // Mostrar el día
+
+      // Verificar si hay festividades
+      const festividad = mostrarFestividades(diaDelAno);
+      console.log(`Festividad en el día ${diaDelAno}: ${festividad}`);
+      diaElem.querySelector('.calendar__task').textContent = festividad;
+    } else {
+      // Ocultar los días sobrantes
+      diaElem.style.display = 'none';
+    }
+  });
+
+  // Llamada a la función para actualizar las fases lunares
+  actualizarLunas();
+}
+
+// Función para actualizar las fases lunares en el calendario
+function actualizarLunas() {
+  const diasEnElAno = obtenerDiaDelAno(); // Obtenemos el día actual en el año
+
+  // Calculamos la fase de cada luna basándonos en su ciclo
+  const faseTimvulf = obtenerFaseLuna(diasEnElAno, lunares.timvulf);
+  const faseKlafu = obtenerFaseLuna(diasEnElAno, lunares.klafu);
+  const faseGasmulf = obtenerFaseLuna(diasEnElAno, lunares.gasmulf);
+  const faseDim = obtenerFaseLuna(diasEnElAno, lunares.dim);
+
+  // Actualizamos los elementos de las fases lunares en el sidebar
+  document.querySelector('.sidebar__list-item .olfTimvulf').textContent = `Fase: ${faseTimvulf}`;
+  document.querySelector('.sidebar__list-item .olfKlafu').textContent = `Fase: ${faseKlafu}`;
+  document.querySelector('.sidebar__list-item .olfGasmulf').textContent = `Fase: ${faseGasmulf}`;
+  document.querySelector('.sidebar__list-item .olfDim').textContent = `Fase: ${faseDim}`;
+}
+
+
+// Listeners para botones de cambiar mes y año
+document.querySelector('#nextMonthBtn').addEventListener('click', () => {
+  cambiarMes(currentMonth + 1);
+});
+
+document.querySelector('#prevMonthBtn').addEventListener('click', () => {
+  cambiarMes(currentMonth - 1);
+});
+
+document.querySelector('#nextYearBtn').addEventListener('click', () => {
+  cambiarAno(currentYear + 1);
+});
+
+document.querySelector('#prevYearBtn').addEventListener('click', () => {
+  cambiarAno(currentYear - 1);
+});
+
+// Inicializar el calendario con el año y mes actual
+document.addEventListener('DOMContentLoaded', () => {
+  actualizarMesYAnoEnAside();
+  actualizarDiaDeLaSemanaEnAside();
+  actualizarDias();
+});
+
+

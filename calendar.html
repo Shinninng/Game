@@ -25,18 +25,37 @@
 								<section>
                                 	
 									<main class="calendar-contain">
-										<section class="title-bar">
+										<section class="title-bar">												
+												<h3 class="title-bar__month"><a id="currentMonthYear"></a></h3>
+											    <button id="prevYearBtn">Año Anterior</button>
+												<button id="nextYearBtn">Año Siguiente</button>
+												<button id="prevMonthBtn">Mes Anterior</button>								
+												<button id="nextMonthBtn">Mes Siguiente</button>
 										</section>
 
-										<aside class="calendar__sidebar">
-											<h2 class="sidebar__heading">Luf<br>Un 1</h2>
-											<ul class="sidebar__list">
-											<li class="sidebar__list-item"><span class="list-item__time">olf Timvulf</span>4, 5, 6, 7</li>						
-											<li class="sidebar__list-item"><span class="list-item__time">olf Klafu</span>8, 9, 10, 11</li>
-											<li class="sidebar__list-item"><span class="list-item__time">olf Gasmulf</span>12, 13, 14, 15</li>
-											<li class="sidebar__list-item"><span class="list-item__time">olf Dim</span>0, 1, 2, 3</li>
-											</ul>
-										</aside>
+										<!-- <section class="title-bar">
+											<button class="title-bar__burger">
+											<span class="burger__lines">  </span>
+											</button> 
+											<span class="title-bar__year">
+
+											</span>
+											<span class="title-bar__month">
+											
+											</span>
+											<div class="title-bar__controls">
+											</div> 
+      									</section>--->
+
+											<aside class="calendar__sidebar">	
+													<h3 class="sidebar__heading"><a id="currentDay">Luf</a></h3>
+													<ul class="sidebar__list">
+														<li class="sidebar__list-item"><span class="list-item__time olfTimvulf"></span></li>
+														<li class="sidebar__list-item"><span class="list-item__time olfKlafu"></span></li>
+														<li class="sidebar__list-item"><span class="list-item__time olfGasmulf"></span></li>
+														<li class="sidebar__list-item"><span class="list-item__time olfDim"></span></li>
+													</ul>
+											</aside>
 
 										
 										<section class="calendar__days">
@@ -53,7 +72,7 @@
 											<section class="calendar__week">
 												<div class="calendar__day today">
 													<span class="calendar__date">1</span>
-													<span class="calendar__task">0</span>
+													<span class="calendar__task">5</span>
 												</div>
 												<div class="calendar__day">
 													<span class="calendar__date">2</span>
@@ -313,6 +332,6 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
+			<script src="assets/js/calendar.js"></script>
 	</body>
 </html>

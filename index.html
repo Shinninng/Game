@@ -14,6 +14,26 @@
 
 				<!-- Main -->
 					<div id="main">
+
+						<div id="modal" class="modal">
+							<div class="modal-content">
+								<span class="close-btn" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+								<h2>Bienvenido al Documento Oficial de H4SD</h2>
+								<p>Para navegar, usa el menú a la derecha. Puedes navegar a traves de las diferentes secciones,
+								las cuales, se dividen en diferentes temas.</p>
+								<ul>
+									<li><strong>Ultimas Actualizaciones</strong> </li>
+									<p>Version 1.0</p>
+								</ul>
+							</div>
+						</div>
+
+						<script>
+							window.onload = function() {
+								document.getElementById('modal').style.display = 'block';
+							}
+						</script>
+
 						<div class="inner">
 
 							<!-- Encabezado -->
